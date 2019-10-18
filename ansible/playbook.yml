@@ -1,0 +1,68 @@
+---
+- name: Test Ansible on Azure base VM
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - set_fact: 
+        demo_folder: 'C:\UiPath\Demos\'
+
+
+    # Create required folders
+    - name: Create demo folder
+      win_file:
+        path: "{{ demo_folder }}"
+        state: directory
+
+    - name: Copy PowerShell helper scripts to C:\Temp
+      win_copy:
+        src: PSscripts
+        dest: C:\Temp
+
+    - name: Install Chrome, Firefox
+      win_chocolatey:
+        name:
+        - firefox
+        - googlechrome
+        - git
+        - python
+        state: present
+
+    - name: Install ChromeDriver
+      win_chocolatey:
+        name: chromedriver
+        state: present
+
+    - name: Install Adobe Reader v11.0.10
+      win_chocolatey:
+        name: adobereader
+        version: '11.0.10'
+        ignore_checksums: yes # sha256:C438AC343381031CD47DD4ED966C8E86B2BCD5A1959F55C1C7D8C61920DD18BC
+
+    - name: Install JDK8
+      win_chocolatey:
+        name: jdk8
+
+    - name: Install JRE8
+      win_chocolatey:
+        name: jre8
+
+
+    # Powershell modules installation
+    - name: Ensure NuGET package provider
+      win_shell: Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Force
+
+    # chrome extension cannot be enabled automatically:
+    # https://support.google.com/chrome/thread/9069715?hl=en
+    - name: Install UiPath Studio
+      win_package:
+        path: https://download.uipath.com/versions/19.4.4/UiPathStudio.msi
+        arguments:
+        - /quiet
+        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,RegisterService,JavaBridge,ChromeExtension
+        state: present
+        product_id: '{01D0B127-48B8-4EC7-87C1-41824830F50C}'
+
+    #Install SAP Components
+    - name: Install SAP Components
+      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1
+

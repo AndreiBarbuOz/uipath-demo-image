@@ -1,0 +1,8 @@
+{
+  "subscription_id": "99f4fcd9-845e-420b-8f7b-bc9f4e5fbde3",
+  "client_id": "606aed7c-e369-4a86-adc2-0a2a6b2c71d6",
+  "client_secret": "c69b66ec-a0e9-42e1-927e-8966cf656a18",
+  "build_resource_group_name": "presales-cloud-poc-rg",
+  "managed_image_name": "pre-sales-demo",
+  "managed_image_resource_group_name": "presales-cloud-poc-rg"  
+}

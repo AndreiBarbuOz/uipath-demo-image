@@ -1,0 +1,5 @@
+ansible/inventory_dev.ini
+scripts_dev.sh
+inventory.txt
+ansible/PSscripts/connect-robot.ps1
+packer/parameters_dev.json

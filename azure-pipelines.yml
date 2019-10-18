@@ -1,0 +1,34 @@
+variables:
+- group: demo-vm-deploy
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+container:
+  image: $(containerRegistry).azurecr.io/$(repositoryName):latest
+  endpoint: demovmcontainer
+
+steps:
+- bash: 'sudo chown -R "$(whoami):" .'
+  displayName: 'Changing the owner of /ansible folder to AzureDevops user'
+  failOnStderr: true
+
+- bash: 'packer build -force packer/packer-build.json'
+  displayName: 'Run Packer with Ansible build for alias '
+  failOnStderr: true
+  env:
+    PACKER_CLIENT_ID: '$(packerClientId)'
+    PACKER_CLIENT_SECRET: '$(packerClientSecret)'
+    RESOURCE_GROUP_NAME: '$(resourceGroupName)'
+    SUBSCRIPTION_ID: '$(subscriptionId)'
+    MANAGED_IMAGE_NAME: '$(managedImageName)'
+    IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'
+    BUILD_NUMBER: '$(Build.BuildId)'
+    DEFINITION_NAME: '$(Build.DefinitionName)'
+    DEFINITION_VERSION: '$(Build.DefinitionVersion)'
+    REPOSITORY_NAME: '$(Build.Repository.Name)'
+    SOURCE_BRANCH: '$(Build.SourceBranch)'
+    SOURCE_VERSION: '$(Build.SourceVersion)'
+
