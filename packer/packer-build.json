@@ -1,0 +1,99 @@
+{
+  "variables": {
+    "client_id": "{{env `PACKER_CLIENT_ID`}}",
+    "subscription_id": "{{env `SUBSCRIPTION_ID`}}",
+    "build_resource_group_name": "{{env `RESOURCE_GROUP_NAME`}}",
+    "managed_image_resource_group_name": "{{env `RESOURCE_GROUP_NAME`}}",
+    "client_secret": "{{env `PACKER_CLIENT_SECRET`}}",
+    "image_version": "{{env `IMAGE_VERSION`}}",
+    "image_name": "{{env `IMAGE_NAME`}}",
+    "image_alias": "{{env `IMAGE_ALIAS`}}",
+    "image_publisher": "{{env `IMAGE_PUBLISHER`}}",
+    "image_offer": "{{env `IMAGE_OFFER`}}",
+    "image_sku": "{{env `IMAGE_SKU`}}",
+    "build_number": "{{env `BUILD_NUMBER`}}",
+    "definition_name": "{{env `DEFINITION_NAME`}}",
+    "definition_version": "{{env `DEFINITION_VERSION`}}",
+    "repository_name": "{{env `REPOSITORY_NAME`}}",
+    "source_branch": "{{env `SOURCE_BRANCH`}}",
+    "source_version": "{{env `SOURCE_VERSION`}}"
+  },
+  "builders": [
+    {
+      "subscription_id": "{{user `subscription_id`}}",
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "type": "azure-arm",
+      "build_resource_group_name": "{{user `build_resource_group_name`}}",
+      "managed_image_name": "{{user `image_name`}}",
+      "managed_image_resource_group_name": "{{user `build_resource_group_name`}}",
+      "os_type": "Windows",
+      "image_publisher": "MicrosoftWindowsDesktop",
+      "image_offer": "office-365",
+      "image_sku": "rs5-evd-o365pp",
+      "communicator": "winrm",
+      "winrm_use_ssl": true,
+      "winrm_insecure": true,
+      "winrm_timeout": "5m",
+      "winrm_username": "packer",
+      "azure_tags": {
+        "Owner": "andrei.barbu@uipath.com",
+        "Project": "DSF",
+        "buildNumber": "{{user `build_number`}}",
+        "definitionName": "{{user `definition_name`}}",
+        "definitionVersion": "{{user `definition_version`}}",
+        "repositoryName": "{{user `repository_name`}}",
+        "sourceBranch": "{{user `source_branch`}}",
+        "sourceVersion": "{{user `source_version`}}",
+        "imageVersion": "{{user `image_version`}}",
+        "imageAlias": "{{user `image_alias`}}"
+      },
+      "vm_size": "Standard_DS2_v2"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "powershell",
+      "scripts": [
+        "{{template_dir}}/SetupWinRM.ps1"
+      ]
+    },
+    {
+      "type": "powershell",
+      "scripts": [
+        "{{template_dir}}/SetupAnsibleInventory.ps1"
+      ],
+      "environment_vars": [
+        "ARTIFACT_SERVER={{user `artifact_server`}}",
+        "PACKER_WINRMINSEC=True",
+        "PACKER_PASSWORD={{.WinRMPassword}}",
+        "PACKER_USESSL=True"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "inventory.txt",
+      "destination": "inventory.txt",
+      "direction": "download"
+    },
+    {
+      "type": "shell-local",
+      "command": "ansible-playbook ansible/playbook.yml -i ./inventory.txt -e disable_reboot=True -vvvvv"
+    },
+    {
+      "type": "windows-restart"
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Write-Output \"starting sysprep\"",
+        "if( Test-Path $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml -Force }",
+        "& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
+        "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+      ],
+      "only": [
+        "azure-arm"
+      ]
+    }
+  ]
+}
