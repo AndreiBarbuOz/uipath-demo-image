@@ -16,7 +16,9 @@
     "definition_version": "{{env `DEFINITION_VERSION`}}",
     "repository_name": "{{env `REPOSITORY_NAME`}}",
     "source_branch": "{{env `SOURCE_BRANCH`}}",
-    "source_version": "{{env `SOURCE_VERSION`}}"
+    "source_version": "{{env `SOURCE_VERSION`}}",
+    "shared_image_gallery": "{{env `SHARED_IMAGE_GALLERY`}}", 
+    "shared_image_name": "{{env `SHARED_IMAGE_NAME`}}"
   },
   "builders": [
     {
@@ -27,6 +29,17 @@
       "build_resource_group_name": "{{user `build_resource_group_name`}}",
       "managed_image_name": "{{user `image_name`}}",
       "managed_image_resource_group_name": "{{user `build_resource_group_name`}}",
+      "shared_image_gallery_destination": {
+        "resource_group": "{{user `build_resource_group_name`}}",
+        "gallery_name": "{{user `shared_image_gallery`}}",
+        "image_name": "{{user `shared_image_name`}}",
+        "image_version": "0.0.{{user `build_number`}}",
+        "replication_regions": [
+          "Australia Southeast",
+          "Southeast Asia",
+          "West Europe"
+        ]
+      },
       "os_type": "Windows",
       "image_publisher": "MicrosoftWindowsDesktop",
       "image_offer": "office-365",
