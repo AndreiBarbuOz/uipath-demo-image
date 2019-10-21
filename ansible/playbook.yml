@@ -56,13 +56,13 @@
     - name: Set the owner the ssh-key
       win_owner:
         path: C:\Temp\azure_devops
-        user: uipath
+        user: packer
         recurse: no
 
     - name: chmod
       win_acl:
         path: C:\Temp\azure_devops
-        user: uipath
+        user: packer
         rights: Read,Write,Modify,FullControl,Delete
         type: allow
         state: present

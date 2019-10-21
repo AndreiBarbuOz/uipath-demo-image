@@ -5,7 +5,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-16.04'
 container:
   image: $(containerRegistry).azurecr.io/$(repositoryName):latest
   endpoint: demovmcontainer
