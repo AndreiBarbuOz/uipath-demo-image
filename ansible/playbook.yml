@@ -5,7 +5,13 @@
   tasks:
     - set_fact: 
         demo_folder: 'C:\UiPath\Demos\'
-
+    - set_fact: 
+        git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
+    
+    - debug: 
+        msg: "value: {{git_repo}}"
+    
+    - debug: msg="{{ lookup('env','HOME') }} is an environment variable"      
 
     # Create required folders
     - name: Create demo folder
@@ -18,6 +24,12 @@
         src: PSscripts
         dest: C:\Temp
 
+    - name: Copy ssh key for github access
+      win_copy:
+        src: id_rsa
+        dest: C:\Temp\azure_devops
+
+
     - name: Install Chrome, Firefox
       win_chocolatey:
         name:
@@ -25,7 +37,50 @@
         - googlechrome
         - git
         - python
+        - notepadplusplus
+        - github-desktop
         state: present
+
+
+    - name: Set ssh-agent
+      win_service:
+        name: ssh-agent
+        start_mode: manual
+        state: started
+
+    - name: Disable inherited ACE's
+      win_acl_inheritance:
+        path: C:\Temp\azure_devops
+        state: absent
+
+    - name: Set the owner the ssh-key
+      win_owner:
+        path: C:\Temp\azure_devops
+        user: uipath
+        recurse: no
+
+    - name: chmod
+      win_acl:
+        path: C:\Temp\azure_devops
+        user: uipath
+        rights: Read,Write,Modify,FullControl,Delete
+        type: allow
+        state: present
+        inherit: ContainerInherit, ObjectInherit
+        propagation: 'None'
+
+    - name: sshkey add
+      win_shell: |
+        ssh -o StrictHostKeyChecking=no git@github.com
+        ssh-add C:\Temp\azure_devops
+        Add-Content -Path "C:\Program Files\Git\etc\ssh\ssh_config" "IdentityFile C:\Temp\azure_devops"
+        git clone {{git_repo}} C:\UiPath\Demos
+    
+    - name: remove ssh key
+      win_file:
+        path: C:\Temp\azure_devops
+        state: absent
+
 
     - name: Install ChromeDriver
       win_chocolatey:
@@ -62,7 +117,7 @@
         state: present
         product_id: '{01D0B127-48B8-4EC7-87C1-41824830F50C}'
 
-    #Install SAP Components
-    - name: Install SAP Components
-      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1
-
+#    #Install SAP Components
+#    - name: Install SAP Components
+#      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1
+#

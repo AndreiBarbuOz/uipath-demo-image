@@ -15,6 +15,15 @@ steps:
   displayName: 'Changing the owner of /ansible folder to AzureDevops user'
   failOnStderr: true
 
+- task: AzureCLI@2
+  displayName: Download ssh key for git access
+  inputs:
+    azureSubscription: $(azureSubscription)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript:  |
+      az keyvault secret download --id $(sshKeyVaultId) --file ansible/id_rsa
+
 - bash: 'packer build -force packer/packer-build.json'
   displayName: 'Run Packer with Ansible build for alias '
   failOnStderr: true
@@ -24,6 +33,7 @@ steps:
     RESOURCE_GROUP_NAME: '$(resourceGroupName)'
     SUBSCRIPTION_ID: '$(subscriptionId)'
     MANAGED_IMAGE_NAME: '$(managedImageName)'
+    GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
     IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'
     BUILD_NUMBER: '$(Build.BuildId)'
     DEFINITION_NAME: '$(Build.DefinitionName)'

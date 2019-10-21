@@ -47,9 +47,9 @@
         "virtualNetworkName": "[concat(parameters('projectName'), '-vnet')]",
         "networkSecurityGroupName": "[concat(parameters('projectName'), '-nsg')]",
         "dnsLabelPrefix": "[concat(parameters('projectName'), '-wb')]",
-        "windowsOsVersion": "rs5-pro",
+        "windowsOsVersion": "rs5-evd-o365pp",
         "imagePublisher": "MicrosoftWindowsDesktop",
-        "imageOffer": "Windows-10",
+        "imageOffer": "office-365",
         "vmName": "[concat(parameters('projectName'), '-vm')]"
     },
     "resources": [
