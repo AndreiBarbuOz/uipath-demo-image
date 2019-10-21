@@ -6,7 +6,6 @@
     "managed_image_resource_group_name": "{{env `RESOURCE_GROUP_NAME`}}",
     "client_secret": "{{env `PACKER_CLIENT_SECRET`}}",
     "image_version": "{{env `IMAGE_VERSION`}}",
-    "image_name": "{{env `IMAGE_NAME`}}",
     "image_alias": "{{env `IMAGE_ALIAS`}}",
     "image_publisher": "{{env `IMAGE_PUBLISHER`}}",
     "image_offer": "{{env `IMAGE_OFFER`}}",
@@ -27,7 +26,7 @@
       "client_secret": "{{user `client_secret`}}",
       "type": "azure-arm",
       "build_resource_group_name": "{{user `build_resource_group_name`}}",
-      "managed_image_name": "{{user `image_name`}}",
+      "managed_image_name": "{{user `shared_image_name`}}",
       "managed_image_resource_group_name": "{{user `build_resource_group_name`}}",
       "shared_image_gallery_destination": {
         "resource_group": "{{user `build_resource_group_name`}}",
