@@ -9,7 +9,7 @@ pool:
 container:
   image: $(containerRegistry).azurecr.io/$(repositoryName):latest
   endpoint: demovmcontainer
-timeoutInMinutes: 0  
+
 
 steps:
 - bash: 'sudo chown -R "$(whoami):" .'
@@ -28,6 +28,7 @@ steps:
 - bash: 'packer build -force packer/packer-build.json'
   displayName: 'Run Packer with Ansible build for alias '
   failOnStderr: true
+  timeoutInMinutes: 360
   env:
     PACKER_CLIENT_ID: '$(packerClientId)'
     PACKER_CLIENT_SECRET: '$(packerClientSecret)'
