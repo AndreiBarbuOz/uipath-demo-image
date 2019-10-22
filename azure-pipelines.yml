@@ -9,6 +9,7 @@ pool:
 container:
   image: $(containerRegistry).azurecr.io/$(repositoryName):latest
   endpoint: demovmcontainer
+timeoutInMinutes: 0  
 
 steps:
 - bash: 'sudo chown -R "$(whoami):" .'
