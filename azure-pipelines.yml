@@ -4,44 +4,45 @@ variables:
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-16.04'
-container:
-  image: $(containerRegistry).azurecr.io/$(repositoryName):latest
-  endpoint: demovmcontainer
+jobs:
+  - job: Build Demo image
+    pool:
+      vmImage: 'ubuntu-16.04'
+    container:
+      image: $(containerRegistry).azurecr.io/$(repositoryName):latest
+      endpoint: demovmcontainer
+    timeoutInMinutes: 360
+    steps:
+    - bash: 'sudo chown -R "$(whoami):" .'
+      displayName: 'Changing the owner of /ansible folder to AzureDevops user'
+      failOnStderr: true
 
+    - task: AzureCLI@2
+      displayName: Download ssh key for git access
+      inputs:
+        azureSubscription: $(azureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript:  |
+          az keyvault secret download --id $(sshKeyVaultId) --file ansible/id_rsa
 
-steps:
-- bash: 'sudo chown -R "$(whoami):" .'
-  displayName: 'Changing the owner of /ansible folder to AzureDevops user'
-  failOnStderr: true
-
-- task: AzureCLI@2
-  displayName: Download ssh key for git access
-  inputs:
-    azureSubscription: $(azureSubscription)
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript:  |
-      az keyvault secret download --id $(sshKeyVaultId) --file ansible/id_rsa
-
-- bash: 'packer build -force packer/packer-build.json'
-  displayName: 'Run Packer with Ansible build for alias '
-  failOnStderr: true
-  timeoutInMinutes: 360
-  env:
-    PACKER_CLIENT_ID: '$(packerClientId)'
-    PACKER_CLIENT_SECRET: '$(packerClientSecret)'
-    RESOURCE_GROUP_NAME: '$(resourceGroupName)'
-    SUBSCRIPTION_ID: '$(subscriptionId)'
-    GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
-    IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'
-    SHARED_IMAGE_GALLERY: '$(sharedImageGalleryName)'
-    SHARED_IMAGE_NAME: '$(managedImageName)'
-    BUILD_NUMBER: '$(Build.BuildId)'
-    DEFINITION_NAME: '$(Build.DefinitionName)'
-    DEFINITION_VERSION: '$(Build.DefinitionVersion)'
-    REPOSITORY_NAME: '$(Build.Repository.Name)'
-    SOURCE_BRANCH: '$(Build.SourceBranch)'
-    SOURCE_VERSION: '$(Build.SourceVersion)'
+    - bash: 'packer build -force packer/packer-build.json'
+      displayName: 'Run Packer with Ansible build for alias '
+      failOnStderr: true
+      timeoutInMinutes: 360
+      env:
+        PACKER_CLIENT_ID: '$(packerClientId)'
+        PACKER_CLIENT_SECRET: '$(packerClientSecret)'
+        RESOURCE_GROUP_NAME: '$(resourceGroupName)'
+        SUBSCRIPTION_ID: '$(subscriptionId)'
+        GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
+        IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'
+        SHARED_IMAGE_GALLERY: '$(sharedImageGalleryName)'
+        SHARED_IMAGE_NAME: '$(managedImageName)'
+        BUILD_NUMBER: '$(Build.BuildId)'
+        DEFINITION_NAME: '$(Build.DefinitionName)'
+        DEFINITION_VERSION: '$(Build.DefinitionVersion)'
+        REPOSITORY_NAME: '$(Build.Repository.Name)'
+        SOURCE_BRANCH: '$(Build.SourceBranch)'
+        SOURCE_VERSION: '$(Build.SourceVersion)'
 
