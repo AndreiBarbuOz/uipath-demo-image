@@ -48,6 +48,7 @@
       "winrm_insecure": true,
       "winrm_timeout": "5m",
       "winrm_username": "packer",
+      "managed_image_storage_account_type": "Premium_LRS",
       "azure_tags": {
         "Owner": "andrei.barbu@uipath.com",
         "Project": "DSF",
