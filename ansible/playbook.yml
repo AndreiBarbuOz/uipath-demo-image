@@ -35,6 +35,10 @@
         - github-desktop
         state: present
 
+    - name: install pipenv
+      pip:
+        name: pipenv
+
     - name: restart machine after install
       win_reboot:
 
