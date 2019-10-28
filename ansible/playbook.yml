@@ -9,6 +9,7 @@
         git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
         admin_user: "{{lookup('env', 'PACKER_USERNAME') }}"
         git_token: "{{lookup('env', 'GIT_TOKEN')}}"
+        config_repo: "{{ lookup('env','GIT_CONFIG_REPO') }}"
 
     # Create required folders
     - name: Create demo folder
@@ -36,6 +37,7 @@
     - name: Git clone repositories
       win_shell: |
         git clone https://{{git_token}}@github.com/{{ git_repo }} {{ demo_folder }}
+        git clone https://{{git_token}}@github.com/{{ config_repo }} C:\\Temp\\config
     
 
     - name: Install Chrome, Firefox, python

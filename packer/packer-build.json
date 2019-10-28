@@ -35,9 +35,7 @@
         "image_name": "{{user `shared_image_name`}}",
         "image_version": "0.0.{{user `build_number`}}",
         "replication_regions": [
-          "Australia Southeast",
-          "Southeast Asia",
-          "West Europe"
+          "Southeast Asia"
         ]
       },
       "os_type": "Windows",
