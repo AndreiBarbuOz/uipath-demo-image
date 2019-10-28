@@ -8,7 +8,7 @@
     - set_fact: 
         git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
         admin_user: "{{lookup('env', 'PACKER_USERNAME') }}"
-        git_token: "{{lookup('env', 'GIT_TOKEN'}}"
+        git_token: "{{lookup('env', 'GIT_TOKEN')}}"
 
     # Create required folders
     - name: Create demo folder
