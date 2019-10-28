@@ -7,6 +7,7 @@
         demo_folder: 'C:\UiPath\Demos\'
     - set_fact: 
         git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
+        admin_user: "{{lookup('env', 'PACKER_USERNAME') }}"
 
     # Create required folders
     - name: Create demo folder
@@ -53,13 +54,13 @@
     - name: Set the owner the ssh-key
       win_owner:
         path: C:\Temp\azure_devops
-        user: packer
+        user: "{{ admin_user }}"
         recurse: no
 
     - name: chmod
       win_acl:
         path: C:\Temp\azure_devops
-        user: packer
+        user: "{{ admin_user }}"
         rights: Read,Write,Modify,FullControl,Delete
         type: allow
         state: present

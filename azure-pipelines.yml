@@ -45,4 +45,5 @@ jobs:
         REPOSITORY_NAME: '$(Build.Repository.Name)'
         SOURCE_BRANCH: '$(Build.SourceBranch)'
         SOURCE_VERSION: '$(Build.SourceVersion)'
+        PACKER_USERNAME: 'packer'
 

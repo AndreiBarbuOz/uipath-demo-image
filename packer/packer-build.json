@@ -17,7 +17,8 @@
     "source_branch": "{{env `SOURCE_BRANCH`}}",
     "source_version": "{{env `SOURCE_VERSION`}}",
     "shared_image_gallery": "{{env `SHARED_IMAGE_GALLERY`}}", 
-    "shared_image_name": "{{env `SHARED_IMAGE_NAME`}}"
+    "shared_image_name": "{{env `SHARED_IMAGE_NAME`}}",
+    "packer_username": "{{env `PACKER_USERNAME`}}"
   },
   "builders": [
     {
@@ -47,7 +48,7 @@
       "winrm_use_ssl": true,
       "winrm_insecure": true,
       "winrm_timeout": "5m",
-      "winrm_username": "packer",
+      "winrm_username": "{{user `packer_username`}}",
       "managed_image_storage_account_type": "Premium_LRS",
       "azure_tags": {
         "Owner": "andrei.barbu@uipath.com",
