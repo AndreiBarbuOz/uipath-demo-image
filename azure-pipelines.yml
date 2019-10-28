@@ -36,6 +36,7 @@ jobs:
         RESOURCE_GROUP_NAME: '$(resourceGroupName)'
         SUBSCRIPTION_ID: '$(subscriptionId)'
         GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
+        GIT_TOKEN: $(githubToken)
         IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'
         SHARED_IMAGE_GALLERY: '$(sharedImageGalleryName)'
         SHARED_IMAGE_NAME: '$(managedImageName)'
