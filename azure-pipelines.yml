@@ -27,6 +27,7 @@ jobs:
         RESOURCE_GROUP_NAME: '$(resourceGroupName)'
         SUBSCRIPTION_ID: '$(subscriptionId)'
         GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
+        GIT_REPO_SOURCE2: '$(uipathDemoGitRepo2)'
         GIT_TOKEN: $(githubToken)
         GIT_CONFIG_REPO: $(configGitRepo)
         IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'

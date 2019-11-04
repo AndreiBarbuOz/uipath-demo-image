@@ -5,15 +5,22 @@
   tasks:
     - set_fact: 
         demo_folder: 'C:\UiPath\Demos\'
+        demo_folder2: 'C:\UiPath\Demos2\'
     - set_fact: 
         git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
         git_token: "{{lookup('env', 'GIT_TOKEN')}}"
         config_repo: "{{ lookup('env','GIT_CONFIG_REPO') }}"
+        git_repo2: "{{ lookup('env', 'GIT_REPO_SOURCE2') }}"
 
     # Create required folders
     - name: Create demo folder
       win_file:
         path: "{{ demo_folder }}"
+        state: directory
+    
+    - name: second demo folder
+      win_file:
+        path: "{{ demo_folder2 }}"
         state: directory
 
     - name: Copy PowerShell helper scripts to C:\Temp
@@ -37,7 +44,7 @@
       win_shell: |
         git clone https://{{git_token}}@github.com/{{ git_repo }} {{ demo_folder }}
         git clone https://{{git_token}}@github.com/{{ config_repo }} C:\\Temp\\config
-    
+        git clone https://{{git_token}}@github.com/{{ git_repo2 }} {{ demo_folder2 }}
 
     - name: Install Chrome, Firefox, python
       win_chocolatey:
