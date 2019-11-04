@@ -4,3 +4,4 @@ inventory.txt
 ansible/PSscripts/connect-robot.ps1
 packer/parameters_dev.json
 ansible/id_rsa
+ansible/play.yml

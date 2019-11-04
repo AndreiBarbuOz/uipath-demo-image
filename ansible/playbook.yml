@@ -7,7 +7,6 @@
         demo_folder: 'C:\UiPath\Demos\'
     - set_fact: 
         git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
-        admin_user: "{{lookup('env', 'PACKER_USERNAME') }}"
         git_token: "{{lookup('env', 'GIT_TOKEN')}}"
         config_repo: "{{ lookup('env','GIT_CONFIG_REPO') }}"
 
@@ -87,3 +86,16 @@
     #Install SAP Components
     - name: Install SAP Components
       win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1
+
+    - name: Install Access Database Engine 2010
+      win_chocolatey:
+        name:
+        - made2010
+        state: present
+
+    - name: install pip modules
+      win_shell: |
+        pip install pymongo
+        pip install azure
+        pip install requests
+

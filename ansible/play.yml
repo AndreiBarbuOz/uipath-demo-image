@@ -5,69 +5,16 @@
   tasks:
     - set_fact: 
         demo_folder: 'C:\UiPath\Demos\'
-    - set_fact: 
-        git_repo: "{{ lookup('env','GIT_REPO_SOURCE') }}"
-        admin_user: "{{lookup('env', 'PACKER_USERNAME') }}"
 
-    # Create required folders
-    - name: Create demo folder
-      win_file:
-        path: "{{ demo_folder }}"
-        state: directory
-
-    - name: Copy PowerShell helper scripts to C:\Temp
-      win_copy:
-        src: PSscripts
-        dest: C:\Temp
-
-    - name: Copy ssh key for github access
-      win_copy:
-        src: id_rsa
-        dest: C:\Temp\azure_devops
-
-    - name: Install git client
+    - name: Install Access Database Engine 2010
       win_chocolatey:
         name:
-        - git
+        - made2010
         state: present
 
-
-    - name: Set ssh-agent
-      win_service:
-        name: ssh-agent
-        start_mode: manual
-        state: started
-
-    - name: Disable inherited ACE's
-      win_acl_inheritance:
-        path: C:\Temp\azure_devops
-        state: absent
-
-    - name: Set the owner the ssh-key
-      win_owner:
-        path: C:\Temp\azure_devops
-        user: "{{ admin_user }}"
-        recurse: no
-
-    - name: chmod
-      win_acl:
-        path: C:\Temp\azure_devops
-        user: "{{ admin_user }}"
-        rights: Read,Write,Modify,FullControl,Delete
-        type: allow
-        state: present
-        inherit: ContainerInherit, ObjectInherit
-        propagation: 'None'
-
-    - name: sshkey add
+    - name: install pymongo
       win_shell: |
-        ssh -o StrictHostKeyChecking=no git@github.com
-        ssh-add C:\Temp\azure_devops
-        Add-Content -Path "C:\Program Files\Git\etc\ssh\ssh_config" "IdentityFile C:\Temp\azure_devops"
-        git clone {{git_repo}} {{ demo_folder }}
-    
-    - name: remove ssh key
-      win_file:
-        path: C:\Temp\azure_devops
-        state: absent
+        pip install pymongo
+        pip install azure
+        pip install requests
 

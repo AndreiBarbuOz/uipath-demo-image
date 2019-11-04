@@ -10,6 +10,8 @@ Build an Image using `Packer` and `Ansible`, based on the build instructions and
 
 ![Variables](https://www.lucidchart.com/publicSegments/view/083100cb-44a8-4221-a59e-755ac8cb7191/image.png)
 
+![Greater picture](https://www.lucidchart.com/publicSegments/view/8b307462-4e6c-4262-a7b0-9ac1bc862546/image.png)
+
 ## Development environment 
 
 ### Provisioning the VM for dev and test
