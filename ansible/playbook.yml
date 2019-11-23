@@ -8,8 +8,6 @@
         demo_folder: 'C:\UiPath\Demos\'
         git_repos: "{{ lookup('env','GIT_REPO_SOURCE').split(',') }}"
         git_token: "{{lookup('env', 'GIT_TOKEN')}}"
-        config_repo: "{{ lookup('env','GIT_CONFIG_REPO') }}"
-        git_repo2: "{{ lookup('env', 'GIT_REPO_SOURCE2') }}"      
 
     # Create required folders
     - name: Create demo folder
@@ -27,16 +25,6 @@
         name:
         - git
         state: present
-
-    - name: Set ssh-agent
-      win_service:
-        name: ssh-agent
-        start_mode: manual
-        state: started
-
-    - name: Git clone static repositories
-      win_shell: |
-        git clone https://{{git_token}}@github.com/{{ config_repo }} C:\\Temp\\config
 
     - name: Git clone demo repositories
       win_shell: |
