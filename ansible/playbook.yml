@@ -86,6 +86,7 @@
         name:
         - made2010
         state: present
+        ignore_checksums: yes # 15E5151BDE13AA6756B7D0C74DB5831932559FC4A60D1F7A43ED1F44E8102558
 
     - name: install pip modules
       win_shell: |
