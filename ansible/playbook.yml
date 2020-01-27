@@ -20,6 +20,11 @@
         src: PSscripts
         dest: C:\Temp
 
+    - name: Copy Config files to C:\Temp
+      win_copy:
+        src: configFiles
+        dest: C:\Temp
+
     - name: Install git client
       win_chocolatey:
         name:
@@ -70,12 +75,15 @@
     # https://support.google.com/chrome/thread/9069715?hl=en
     - name: Install UiPath Studio
       win_package:
-        path: https://download.uipath.com/versions/19.10.1/UiPathStudio.msi
+        path: https://download.uipath.com/versions/19.10.3/UiPathStudio.msi
         arguments:
         - /quiet
         - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,RegisterService,JavaBridge,ChromeExtension
         state: present
-        product_id: '{3C75A39B-7E2B-458F-A209-C30D6689CE60}'
+        product_id: '{2000F340-CF98-4591-A099-8D781BF4B593}'
+    
+    - name: Autostart UiPath Robot immediately
+      win_shell: sc.exe config UiRobotSvc start=auto
 
     #Install SAP Components
     - name: Install SAP Components

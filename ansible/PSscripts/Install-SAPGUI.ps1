@@ -1,7 +1,7 @@
 param(
     [string] $DownloadDirectory = "C:\Temp\SAPWorkdir",
 
-    [string] $UserConfigDirectory = "C:\Temp\SAPConfig",
+    [string] $UserConfigDirectory = "C:\Temp\configFiles",
 
     [string] $DownloadURL = "https://presalesdemobuild.blob.core.windows.net/binaries/SAPGUI_Installer.zip",
 
@@ -13,7 +13,6 @@ $InstallerZip = "1_SAPGUI7.50_WINDOWS.zip"
 $PatchFile = "2_PATCH_gui750_3-80001468.exe"
 $Hotfix = "3_HotFix_gui750_05_1-80001468.exe"
 $SapInstallerPath = [System.Io.Path]::Combine($DownloadDirectory, "SAPGUI7.50_WINDOWS", "SAPGUI7.50_WINDOWS", "Win32", "Setup", "NwSapSetup.exe")
-$TemplateName = "template_SAPUILandscape.xml"
 
 #Create work directory
 if (!(Test-Path $DownloadDirectory)) {
@@ -34,13 +33,10 @@ Start-Process -FilePath $SapInstallerPath -ArgumentList "/Product=$ProductsToIns
 Start-Process -FilePath $(Join-Path $DownloadDirectory $PatchFile) -ArgumentList "/Silent"  -Wait -NoNewWindow
 Start-Process -FilePath $(Join-Path $DownloadDirectory $Hotfix) -ArgumentList "/Silent"  -Wait -NoNewWindow
 
-#Create SAP user configuration directory
-if (!(Test-Path $UserConfigDirectory)) {
-    [System.Io.Directory]::CreateDirectory($UserConfigDirectory)
-}
-
-#Copy template to configuration directory
-Copy-Item $(Join-Path $DownloadDirectory $TemplateName) -Destination $(Join-Path $UserConfigDirectory $TemplateName)
 
 #Cleanup
 Remove-Item $DownloadDirectory -Recurse
+
+Copy-Item $(Join-Path $UserConfigDirectory "SAPUILandscape.xml") $(Join-Path $([Environment]::GetFolderPath('ApplicationData')) "SAP\Common\SAPUILandscape.xml")
+
+reg import $(Join-Path $UserConfigDirectory "sapGUIScriptingConfig.reg")
