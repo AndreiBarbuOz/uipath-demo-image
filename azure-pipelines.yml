@@ -38,4 +38,5 @@ jobs:
         SOURCE_BRANCH: '$(Build.SourceBranch)'
         SOURCE_VERSION: '$(Build.SourceVersion)'
         PACKER_USERNAME: 'packer'
+        MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'
 
