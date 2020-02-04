@@ -35,7 +35,7 @@
         "image_name": "{{user `shared_image_name`}}",
         "image_version": "0.0.{{user `build_number`}}",
         "replication_regions": [
-          "Southeast Asia"
+          "West Europe"
         ]
       },
       "os_type": "Windows",
@@ -45,11 +45,11 @@
       "communicator": "winrm",
       "winrm_use_ssl": true,
       "winrm_insecure": true,
-      "winrm_timeout": "5m",
+      "winrm_timeout": "15m",
       "winrm_username": "{{user `packer_username`}}",
       "managed_image_storage_account_type": "Premium_LRS",
       "azure_tags": {
-        "Owner": "andrei.barbu@uipath.com",
+        "Owner": "stefan.reutter@uipath.com",
         "Project": "DSF",
         "buildNumber": "{{user `build_number`}}",
         "definitionName": "{{user `definition_name`}}",
@@ -60,7 +60,7 @@
         "imageVersion": "{{user `image_version`}}",
         "imageAlias": "{{user `image_alias`}}"
       },
-      "vm_size": "Standard_DS2_v2"
+      "vm_size": "Standard_D4s_v3"
     }
   ],
   "provisioners": [

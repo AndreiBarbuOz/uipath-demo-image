@@ -25,7 +25,7 @@
     - name: Create initial config
       win_copy:
         content: "{'mongoDBConnectionString': '{{ mongoDBConnectionString }}'}"
-        dest: "{{ config_folder }}dst.json"
+        dest: "{{ config_folder }}dsf.json"
 
     - name: Copy PowerShell helper scripts to C:\Temp
       win_copy:

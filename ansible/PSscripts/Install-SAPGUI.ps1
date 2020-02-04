@@ -3,7 +3,7 @@ param(
 
     [string] $UserConfigDirectory = "C:\Temp\configFiles",
 
-    [string] $DownloadURL = "https://presalesdemobuild.blob.core.windows.net/binaries/SAPGUI_Installer.zip",
+    [string] $DownloadURL = "https://presalesceinternalautoma.blob.core.windows.net/binaries/SAPGUI_Installer.zip", #"https://presalesdemobuild.blob.core.windows.net/binaries/SAPGUI_Installer.zip",
 
     [string] $ProductsToInstall = "SAPGUI+NWBC65"
 )
@@ -37,6 +37,5 @@ Start-Process -FilePath $(Join-Path $DownloadDirectory $Hotfix) -ArgumentList "/
 #Cleanup
 Remove-Item $DownloadDirectory -Recurse
 
-Copy-Item $(Join-Path $UserConfigDirectory "SAPUILandscape.xml") $(Join-Path $([Environment]::GetFolderPath('ApplicationData')) "SAP\Common\SAPUILandscape.xml")
 
 reg import $(Join-Path $UserConfigDirectory "sapGUIScriptingConfig.reg")
