@@ -38,4 +38,3 @@ Start-Process -FilePath $(Join-Path $DownloadDirectory $Hotfix) -ArgumentList "/
 Remove-Item $DownloadDirectory -Recurse
 
 
-reg import $(Join-Path $UserConfigDirectory "sapGUIScriptingConfig.reg")

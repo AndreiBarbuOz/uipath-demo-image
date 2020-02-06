@@ -18,7 +18,7 @@ Build an Image using `Packer` and `Ansible`, based on the build instructions and
 During development and testing, a VM needs to be provisioned, using the ARM template: 
 
 ```bash
-az group deployment create --resource-group <resource-group> --template-file .\azure-deploy-vm.template.json --mode Complete --name demoImage --parameters adminPassword=<password>
+az group deployment create --resource-group <resource-group> --template-file .\azure-deploy-vm.template.json --name demoImage --parameters adminPassword=<password>
 ```
 The output from the command contains the key `output`, which indicates the fully qualified domain name of the VM which was provisioned. This is used in the `inventory.ini` file as an input to Ansible. This can also be obtained later using: 
 
