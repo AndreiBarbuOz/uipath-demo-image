@@ -124,5 +124,3 @@
         path: HKCU:\AppEvents\Schemes
         name: 
         data: .None
-      tags:
-        - dev

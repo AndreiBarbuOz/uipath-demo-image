@@ -22,21 +22,21 @@ jobs:
       failOnStderr: true
       timeoutInMinutes: 360
       env:
+        SUBSCRIPTION_ID: '$(subscriptionId)'
         PACKER_CLIENT_ID: '$(packerClientId)'
         PACKER_CLIENT_SECRET: '$(packerClientSecret)'
         RESOURCE_GROUP_NAME: '$(resourceGroupName)'
-        SUBSCRIPTION_ID: '$(subscriptionId)'
+        BUILD_NUMBER: '$(Build.BuildId)'
         GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
         GIT_TOKEN: $(githubToken)
-        IMAGE_NAME: '$(managedImageName)_$(Build.BuildId)'
         SHARED_IMAGE_GALLERY: '$(sharedImageGalleryName)'
         SHARED_IMAGE_NAME: '$(managedImageName)'
-        BUILD_NUMBER: '$(Build.BuildId)'
-        DEFINITION_NAME: '$(Build.DefinitionName)'
-        DEFINITION_VERSION: '$(Build.DefinitionVersion)'
-        REPOSITORY_NAME: '$(Build.Repository.Name)'
-        SOURCE_BRANCH: '$(Build.SourceBranch)'
-        SOURCE_VERSION: '$(Build.SourceVersion)'
-        PACKER_USERNAME: 'packer'
-        MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'
+        MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'        
+        PROJECT_NAME: '$(projectName)'
+        OWNER_EMAIL: '$(ownerEmail)'
+        PACKER_VM_SIZE: '$(packerVMSize)'
+        PACKER_BASE_IMAGE: '$(packerBaseImage)'
+        PACKER_BASE_SKU: '$(packerBaseSKU)'
+        PACKER_USERNAME: '$(packerUsername)'
+        PACKER_LOCATION: '$(packerLocation)'
 
