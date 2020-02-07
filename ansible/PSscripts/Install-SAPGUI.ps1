@@ -3,7 +3,7 @@ param(
 
     [string] $UserConfigDirectory = "C:\Temp\configFiles",
 
-    [string] $DownloadURL = "https://presalesceinternalautoma.blob.core.windows.net/binaries/SAPGUI_Installer.zip", #"https://presalesdemobuild.blob.core.windows.net/binaries/SAPGUI_Installer.zip",
+    [string] $DownloadURL = "https://presalesdemobuild.blob.core.windows.net/binaries/SAPGUI_Installer.zip", #"https://presalesceinternalautoma.blob.core.windows.net/binaries/SAPGUI_Installer.zip"
 
     [string] $ProductsToInstall = "SAPGUI+NWBC65"
 )
