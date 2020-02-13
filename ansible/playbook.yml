@@ -148,9 +148,3 @@
         path: C:\Temp\configFiles\orchestratorCertificate.cer
         store_name: Root
     
-    - name: Show file extensions
-      win_regedit:
-        path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-        name: HideFileExt
-        data: 0
-        type: dword
