@@ -100,7 +100,7 @@
         path: https://download.uipath.com/versions/19.10.4/UiPathStudio.msi
         arguments:
         - /quiet
-        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,RegisterService,JavaBridge,ChromeExtension
+        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,UseAgentDesktop,StartupLauncher,RegisterService,JavaBridge,ChromeExtension
         state: present
         product_id: '{84EFE417-2716-4CF3-B5B1-A907FB6498AE}'
 
@@ -112,7 +112,6 @@
           - ADDLOCAL=RemoteRuntime,RemoteRuntimeTask
         state: present
         product_id: '{2F9DD2FF-128B-4957-9035-3DB2F80B5E51}'
-      tags: dev
     
     - name: Autostart UiPath Robot immediately
       win_shell: sc.exe config UiRobotSvc start=auto
