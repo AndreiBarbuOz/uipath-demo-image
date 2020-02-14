@@ -63,6 +63,7 @@
         name: googlechrome
         pinned: yes
         state: present
+        ignore_checksums: yes
 
     - name: Install python
       win_chocolatey:
