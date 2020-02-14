@@ -63,7 +63,7 @@ apt-get update && \
     apt-get install -y ansible && \
     pip install -U "pywinrm>=0.3.0"
 
-PACKER_VERSION="1.4.1"
+PACKER_VERSION="1.5.1"
 wget https://releases.hashicorp.com/packer/$PACKER_VERSION/packer_${PACKER_VERSION}_linux_amd64.zip && \
     unzip packer_${PACKER_VERSION}_linux_amd64.zip && \
     mv packer /usr/local/bin    
