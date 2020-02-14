@@ -50,14 +50,25 @@
       loop:
         "{{ git_repos }}"
 
-    - name: Install Chrome, Firefox, python
+    - name: Install Firefox, NP++, github-desktop
       win_chocolatey:
         name:
         - firefox
-        - googlechrome
-        - python
         - notepadplusplus
         - github-desktop
+        state: present
+
+    - name: Install Chrome
+      win_chocolatey:
+        name: googlechrome
+        pinned: yes
+        state: present
+        ignore_checksums: yes
+
+    - name: Install python
+      win_chocolatey:
+        name: python3
+        version: 3.6.8
         state: present
 
     - name: Install ChromeDriver
@@ -87,12 +98,21 @@
     # https://support.google.com/chrome/thread/9069715?hl=en
     - name: Install UiPath Studio
       win_package:
-        path: https://download.uipath.com/versions/19.10.3/UiPathStudio.msi
+        path: https://download.uipath.com/versions/19.10.4/UiPathStudio.msi
         arguments:
         - /quiet
-        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,RegisterService,JavaBridge,ChromeExtension
+        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,UseAgentDesktop,StartupLauncher,RegisterService,JavaBridge,ChromeExtension
         state: present
-        product_id: '{2000F340-CF98-4591-A099-8D781BF4B593}'
+        product_id: '{84EFE417-2716-4CF3-B5B1-A907FB6498AE}'
+
+    - name: Install UiPath Remote Runtime
+      win_package:
+        path: https://download.uipath.com/versions/19.10.4/UiPathRemoteRuntime.msi
+        arguments:
+          - /quiet
+          - ADDLOCAL=RemoteRuntime,RemoteRuntimeTask
+        state: present
+        product_id: '{2F9DD2FF-128B-4957-9035-3DB2F80B5E51}'
     
     - name: Autostart UiPath Robot immediately
       win_shell: sc.exe config UiRobotSvc start=auto
@@ -119,8 +139,13 @@
         url: https://presalesdemobuild.blob.core.windows.net/binaries/uipath.machinelearningextractor.1.0.0-beta.540392.nupkg
         dest: C:\Program Files (x86)\UiPath\Studio\Packages\uipath.machinelearningextractor.1.0.0-beta.540392.nupkg
     
-    - name: Disable Windows sounds
-      win_regedit:
-        path: HKCU:\AppEvents\Schemes
-        name: 
-        data: .None
+    - name: Import Insights Orchestrator certificate 1/2
+      win_certificate_store:
+        path: C:\Temp\configFiles\insightsAzure.cer
+        store_name: Root
+    
+    - name: Import Insights Orchestrator certificate 2/2
+      win_certificate_store:
+        path: C:\Temp\configFiles\orchestratorCertificate.cer
+        store_name: Root
+    
