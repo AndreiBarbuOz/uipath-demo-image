@@ -9,7 +9,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-16.04'
     container:
-      image: $(containerRegistry).azurecr.io/$(repositoryName):latest
+      image: $(containerRegistry).azurecr.io/$(dockerBuildRepositoryName):latest
       endpoint: demovmcontainer
     timeoutInMinutes: 360
     steps:
@@ -22,10 +22,10 @@ jobs:
       failOnStderr: true
       timeoutInMinutes: 360
       env:
-        SUBSCRIPTION_ID: '$(subscriptionId)'
+        SUBSCRIPTION_ID: '$(testSubscriptionId)'
         PACKER_CLIENT_ID: '$(packerClientId)'
         PACKER_CLIENT_SECRET: '$(packerClientSecret)'
-        RESOURCE_GROUP_NAME: '$(resourceGroupName)'
+        RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
         BUILD_NUMBER: '$(Build.BuildId)'
         GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
         GIT_TOKEN: $(githubToken)
