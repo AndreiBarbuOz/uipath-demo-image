@@ -25,15 +25,6 @@
       "build_resource_group_name": "{{user `build_resource_group_name`}}",
       "managed_image_name": "{{user `shared_image_name`}}",
       "managed_image_resource_group_name": "{{user `build_resource_group_name`}}",
-      "shared_image_gallery_destination": {
-        "resource_group": "{{user `build_resource_group_name`}}",
-        "gallery_name": "{{user `shared_image_gallery`}}",
-        "image_name": "{{user `shared_image_name`}}",
-        "image_version": "0.0.{{user `build_number`}}",
-        "replication_regions": [
-          "{{user `packer_location`}}"
-        ]
-      },
       "os_type": "Windows",
       "image_publisher": "MicrosoftWindowsDesktop",
       "image_offer": "{{user `base_image`}}",

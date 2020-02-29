@@ -2,41 +2,46 @@ variables:
 - group: demo-vm-deploy
 
 trigger:
-- master
+  - master
+  - andrei
+  - stefan
 
-jobs:
-  - job: demo_image_build
-    pool:
-      vmImage: 'ubuntu-16.04'
-    container:
-      image: $(containerRegistry).azurecr.io/$(dockerBuildRepositoryName):latest
-      endpoint: demovmcontainer
-    timeoutInMinutes: 360
-    steps:
-    - bash: 'sudo chown -R "$(whoami):" .'
-      displayName: 'Changing the owner of /ansible folder to AzureDevops user'
-      failOnStderr: true
-
-    - bash: 'packer build -on-error=abort -force packer/packer-build.json'
-      displayName: 'Run Packer with Ansible build for alias '
-      failOnStderr: true
-      timeoutInMinutes: 360
-      env:
-        SUBSCRIPTION_ID: '$(testSubscriptionId)'
-        PACKER_CLIENT_ID: '$(packerClientId)'
-        PACKER_CLIENT_SECRET: '$(packerClientSecret)'
-        RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
-        BUILD_NUMBER: '$(Build.BuildId)'
-        GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
-        GIT_TOKEN: $(githubToken)
-        SHARED_IMAGE_GALLERY: '$(sharedImageGalleryName)'
-        SHARED_IMAGE_NAME: '$(managedImageName)'
-        MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'        
-        PROJECT_NAME: '$(projectName)'
-        OWNER_EMAIL: '$(ownerEmail)'
-        PACKER_VM_SIZE: '$(packerVMSize)'
-        PACKER_BASE_IMAGE: '$(packerBaseImage)'
-        PACKER_BASE_SKU: '$(packerBaseSKU)'
-        PACKER_USERNAME: '$(packerUsername)'
-        PACKER_LOCATION: '$(packerLocation)'
-
+stages:
+  - stage: Build
+    displayName: Build and Test
+    jobs:
+      - job: demo_image_build
+        pool:
+          vmImage: 'ubuntu-16.04'
+        container:
+          image: $(containerRegistry).azurecr.io/$(dockerBuildRepositoryName):latest
+          endpoint: demovmcontainer
+        timeoutInMinutes: 360
+        steps:
+        - bash: 'sudo chown -R "$(whoami):" .'
+          displayName: 'Changing the owner of /ansible folder to AzureDevops user'
+          failOnStderr: true
+    
+        - bash: 'packer build -on-error=abort -force packer/packer-build.json'
+          displayName: 'Run Packer with Ansible build for alias '
+          failOnStderr: true
+          timeoutInMinutes: 360
+          env:
+            SUBSCRIPTION_ID: '$(testSubscriptionId)'
+            PACKER_CLIENT_ID: '$(packerClientId)'
+            PACKER_CLIENT_SECRET: '$(packerClientSecret)'
+            RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
+            BUILD_NUMBER: '$(Build.BuildId)'
+            GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
+            GIT_TOKEN: $(githubToken)
+            SHARED_IMAGE_NAME: '$(managedImageName)'
+            MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'        
+            PROJECT_NAME: '$(projectName)'
+            OWNER_EMAIL: '$(ownerEmail)'
+            PACKER_VM_SIZE: '$(packerVMSize)'
+            PACKER_BASE_IMAGE: '$(packerBaseImage)'
+            PACKER_BASE_SKU: '$(packerBaseSKU)'
+            PACKER_USERNAME: '$(packerUsername)'
+            PACKER_LOCATION: '$(packerLocation)'
+      
+      
