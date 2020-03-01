@@ -5,16 +5,13 @@
     "build_resource_group_name": "{{env `RESOURCE_GROUP_NAME`}}",
     "managed_image_resource_group_name": "{{env `RESOURCE_GROUP_NAME`}}",
     "client_secret": "{{env `PACKER_CLIENT_SECRET`}}",
-    "build_number": "{{env `BUILD_NUMBER`}}",
     "project_name": "{{env `PROJECT_NAME`}}",
     "owner_email": "{{env `OWNER_EMAIL`}}",
     "vm_size": "{{env `PACKER_VM_SIZE`}}",
     "base_image": "{{env `PACKER_BASE_IMAGE`}}",
     "base_sku": "{{env `PACKER_BASE_SKU`}}",
-    "shared_image_gallery": "{{env `SHARED_IMAGE_GALLERY`}}", 
     "shared_image_name": "{{env `SHARED_IMAGE_NAME`}}",
-    "packer_username": "{{env `PACKER_USERNAME`}}",
-    "packer_location": "{{env `PACKER_LOCATION`}}"
+    "packer_username": "{{env `PACKER_USERNAME`}}"
   },
   "builders": [
     {
@@ -85,6 +82,13 @@
       "only": [
         "azure-arm"
       ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "manifest.json",
+      "strip_path": true
     }
   ]
 }

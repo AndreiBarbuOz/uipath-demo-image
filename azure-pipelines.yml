@@ -8,7 +8,7 @@ trigger:
 
 stages:
   - stage: Build
-    displayName: Build and Test
+    displayName: Build image
     jobs:
       - job: demo_image_build
         pool:
@@ -22,26 +22,65 @@ stages:
           displayName: 'Changing the owner of /ansible folder to AzureDevops user'
           failOnStderr: true
     
-        - bash: 'packer build -on-error=abort -force packer/packer-build.json'
-          displayName: 'Run Packer with Ansible build for alias '
-          failOnStderr: true
-          timeoutInMinutes: 360
-          env:
-            SUBSCRIPTION_ID: '$(testSubscriptionId)'
-            PACKER_CLIENT_ID: '$(packerClientId)'
-            PACKER_CLIENT_SECRET: '$(packerClientSecret)'
-            RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
-            BUILD_NUMBER: '$(Build.BuildId)'
-            GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
-            GIT_TOKEN: $(githubToken)
-            SHARED_IMAGE_NAME: '$(managedImageName)'
-            MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'        
-            PROJECT_NAME: '$(projectName)'
-            OWNER_EMAIL: '$(ownerEmail)'
-            PACKER_VM_SIZE: '$(packerVMSize)'
-            PACKER_BASE_IMAGE: '$(packerBaseImage)'
-            PACKER_BASE_SKU: '$(packerBaseSKU)'
-            PACKER_USERNAME: '$(packerUsername)'
-            PACKER_LOCATION: '$(packerLocation)'
-      
+#        - bash: 'packer build -on-error=abort -force packer/packer-build.json'
+#          displayName: 'Run Packer with Ansible build for alias '
+#          failOnStderr: true
+#          timeoutInMinutes: 360
+#          env:
+#            SUBSCRIPTION_ID: '$(testSubscriptionId)'
+#            PACKER_CLIENT_ID: '$(packerClientId)'
+#            PACKER_CLIENT_SECRET: '$(packerClientSecret)'
+#            RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
+#            GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
+#            GIT_TOKEN: $(githubToken)
+#            SHARED_IMAGE_NAME: '$(managedImageName)'
+#            MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'        
+#            PROJECT_NAME: '$(projectName)'
+#            OWNER_EMAIL: '$(ownerEmail)'
+#            PACKER_VM_SIZE: '$(packerVMSize)'
+#            PACKER_BASE_IMAGE: '$(packerBaseImage)'
+#            PACKER_BASE_SKU: '$(packerBaseSKU)'
+#            PACKER_USERNAME: '$(packerUsername)'
+  - stage: DeployUAT
+    displayName: Publish image to SIG in UAT
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: deployUAT
+        environment: uat
+        pool:
+          vmImage: 'ubuntu-16.04'
+        timeoutInMinutes: 360
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: AzureCLI@2
+                displayName: publish image to SIG and replicate
+                inputs:
+                  azureSubscription: $(testAzureConnection)
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  inlineScript: |
+                    MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
+                    az sig image-version create -g $(testResourceGroupName) --gallery-name 
+                    testSharedImageGalleryName --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE
+
+  - stage: DeployProd
+    displayName: Publish image to SIG in Prod
+    dependsOn: DeployUAT
+    condition: succeeded()
+    jobs:
+      - deployment: deployProd
+        environment: prod
+        pool:
+          vmImage: 'ubuntu-16.04'
+        timeoutInMinutes: 360
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - bash: echo "publishing to Prod"
+                displayName: 'Test echo'
+                failOnStderr: true
       

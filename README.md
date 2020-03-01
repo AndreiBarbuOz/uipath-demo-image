@@ -1,5 +1,7 @@
 # UiPath demo image
 
+[![Build Status](https://dev.azure.com/andreibarbu0946/DSF/_apis/build/status/AndreiBarbuOz.uipath-demo-image?branchName=master)](https://dev.azure.com/andreibarbu0946/DSF/_build/latest?definitionId=5&branchName=master)
+
 ## Purpose
 
 Build an Image using `Packer` and `Ansible`, based on the build instructions and playbooks found in this repository.
