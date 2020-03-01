@@ -22,33 +22,33 @@ stages:
           displayName: 'Changing the owner of /ansible folder to AzureDevops user'
           failOnStderr: true
     
-#        - bash: 'packer build -on-error=abort -force packer/packer-build.json'
-#          displayName: 'Run Packer with Ansible build for alias '
-#          failOnStderr: true
-#          timeoutInMinutes: 360
-#          env:
-#            SUBSCRIPTION_ID: '$(testSubscriptionId)'
-#            PACKER_CLIENT_ID: '$(packerClientId)'
-#            PACKER_CLIENT_SECRET: '$(packerClientSecret)'
-#            RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
-#            GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
-#            GIT_TOKEN: $(githubToken)
-#            SHARED_IMAGE_NAME: '$(managedImageName)'
-#            MONGO_DB_CONNECTION_STRING: '$(mongoDBConnectionString)'        
-#            PROJECT_NAME: '$(projectName)'
-#            OWNER_EMAIL: '$(ownerEmail)'
-#            PACKER_VM_SIZE: '$(packerVMSize)'
-#            PACKER_BASE_IMAGE: '$(packerBaseImage)'
-#            PACKER_BASE_SKU: '$(packerBaseSKU)'
-#            PACKER_USERNAME: '$(packerUsername)'
-#        - task: CopyFiles@2
-#          inputs:
-#            targetFolder: $(Build.ArtifactStagingDirectory)
-#            contents: '$(Build.SourcesDirectory)/manifest.json'
-#        - task: PublishBuildArtifacts@1
-#          inputs:
-#            pathToPublish: $(Build.ArtifactStagingDirectory)
-#            artifactName: manifest
+        - bash: 'packer build -on-error=abort -force packer/acker-build.json'
+          displayName: 'Run Packer with Ansible build for alias '
+          failOnStderr: true
+          timeoutInMinutes: 360
+          env:
+            SUBSCRIPTION_ID: '$(testSubscriptionId)'
+            PACKER_CLIENT_ID: '$(packerClientId)'
+            PACKER_CLIENT_SECRET: '$(packerClientSecret)'
+            RESOURCE_GROUP_NAME: '$(testResourceGroupName)'
+            GIT_REPO_SOURCE: '$(uipathDemoGitRepo)'
+            GIT_TOKEN: $(githubToken)
+            SHARED_IMAGE_NAME: '$(managedImageName)'
+            MONGO_DB_CONNECTION_STRING: '$mongoDBConnectionString)'        
+            PROJECT_NAME: '$(projectName)'
+            OWNER_EMAIL: '$(ownerEmail)'
+            PACKER_VM_SIZE: '$(packerVMSize)'
+            PACKER_BASE_IMAGE: '$(packerBaseImage)'
+            PACKER_BASE_SKU: '$(packerBaseSKU)'
+            PACKER_USERNAME: '$(packerUsername)'
+        - task: CopyFiles@2
+          inputs:
+            targetFolder: $(Build.ArtifactStagingDirectory)
+            contents: '$(Build.SourcesDirectory)/manifest.json'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            pathToPublish: $(Build.ArtifactStagingDirectory)
+            artifactName: manifest
   - stage: DeployUAT
     displayName: Publish image to SIG in UAT
     dependsOn: Build
@@ -71,7 +71,7 @@ stages:
                   scriptLocation: inlineScript
                   inlineScript: |
                     MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
-                    az sig image-version create -g $(testResourceGroupName) --gallery-name $(testSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE
+                    az sig image-version create -g $(testResourceGroupName) --gallery-name $(testSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
 
   - stage: DeployProd
     displayName: Publish image to SIG in Prod
