@@ -134,4 +134,4 @@ The list of items needed for development and deployment:
     | testResourceGroupName | prod-rg | Resource Group in the Test subscription to be used during deployment |
     | testSubscriptionId | 1234-abc | Azure subscription Id of the Test environment |
     | testSharedImageGalleryName | dsf_sig | Shared image gallery name in the Test environment |
-    
+    | replicationRegions |

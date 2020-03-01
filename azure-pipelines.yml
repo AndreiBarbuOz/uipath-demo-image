@@ -22,7 +22,7 @@ stages:
           displayName: 'Changing the owner of /ansible folder to AzureDevops user'
           failOnStderr: true
     
-        - bash: 'packer build -on-error=abort -force packer/acker-build.json'
+        - bash: 'packer build -on-error=abort -force packer/packer-build.json'
           displayName: 'Run Packer with Ansible build for alias '
           failOnStderr: true
           timeoutInMinutes: 360
