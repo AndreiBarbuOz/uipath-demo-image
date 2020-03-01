@@ -41,6 +41,14 @@ stages:
 #            PACKER_BASE_IMAGE: '$(packerBaseImage)'
 #            PACKER_BASE_SKU: '$(packerBaseSKU)'
 #            PACKER_USERNAME: '$(packerUsername)'
+#        - task: CopyFiles@2
+#          inputs:
+#            targetFolder: $(Build.ArtifactStagingDirectory)
+#            contents: '$(Build.SourcesDirectory)/manifest.json'
+#        - task: PublishBuildArtifacts@1
+#          inputs:
+#            pathToPublish: $(Build.ArtifactStagingDirectory)
+#            artifactName: manifest
   - stage: DeployUAT
     displayName: Publish image to SIG in UAT
     dependsOn: Build
@@ -64,7 +72,7 @@ stages:
                   inlineScript: |
                     MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
                     az sig image-version create -g $(testResourceGroupName) --gallery-name 
-                    testSharedImageGalleryName --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE
+                    $(testSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE
 
   - stage: DeployProd
     displayName: Publish image to SIG in Prod
