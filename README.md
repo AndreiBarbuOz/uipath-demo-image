@@ -1,5 +1,7 @@
 # UiPath demo image
 
+[![Build Status](https://dev.azure.com/andreibarbu0946/DSF/_apis/build/status/AndreiBarbuOz.uipath-demo-image?branchName=master)](https://dev.azure.com/andreibarbu0946/DSF/_build/latest?definitionId=5&branchName=master)
+
 ## Purpose
 
 Build an Image using `Packer` and `Ansible`, based on the build instructions and playbooks found in this repository.
@@ -12,6 +14,7 @@ Build an Image using `Packer` and `Ansible`, based on the build instructions and
 
 ![Greater picture](https://www.lucidchart.com/publicSegments/view/8b307462-4e6c-4262-a7b0-9ac1bc862546/image.png)
 
+![DevOps](https://www.lucidchart.com/publicSegments/view/0b8c74e6-c23e-47c2-8695-6457fcad6937/image.png)
 ## Development environment 
 
 ### Provisioning the VM for dev and test
@@ -63,7 +66,7 @@ apt-get update && \
     apt-get install -y ansible && \
     pip install -U "pywinrm>=0.3.0"
 
-PACKER_VERSION="1.4.1"
+PACKER_VERSION="1.5.1"
 wget https://releases.hashicorp.com/packer/$PACKER_VERSION/packer_${PACKER_VERSION}_linux_amd64.zip && \
     unzip packer_${PACKER_VERSION}_linux_amd64.zip && \
     mv packer /usr/local/bin    
@@ -107,11 +110,28 @@ The list of items needed for development and deployment:
     This will allow `az acr login --identity` using the aforementioned identity
 * An `Azure Pipeline` build triggered by the repository
 * The `Azure Pipeline` needs to have variable group called `demo-vm-deploy` containing these values:
-    - containerRegistry
-    - azureSubscription
-    - repositoryName
-    - dockerConnection
-    - packerClientId
-    - resourceGroupName
-    - subscriptionId
-
+    | Variable| Sample | Meaning|
+    |---|---|---|
+    | containerRegistry | mydockerreg | Docker registry containing the packer-ansible image|
+    | dockerBuildRepositoryName | build-packer-ansible| The docker image containing both packer and ansible bins|
+    | dockerConnection | mydockerconn | Docker connection created in Azure DevOps project settings to pull the build image |
+    | githubToken | acde1234 | Personal github token used to clone demo repositories |
+    | managedImageName | demo-vm | Name of the managed image being built |
+    | ownerEmail | andrei.barbu@uipath.com | Owner email, used for tagging purposes |
+    | packerBaseImage | office-365 | Base image to be used by Packer |
+    | packerBaseSKU | 1903-evd-o365pp | Base SKU to be used by Packer |
+    | packerClientId | 1234-abc | Id of the service account to be used by Packer to authenticate with Azure |
+    | packerClientSecret | 1234-abc | Packer secret used during authentication |
+    | packerVMSize | Standard_D4_v2 | Size of the VM to be used by Packer |
+    | packerUsername | packer | username used by Packer during the build phase |
+    | prodAzureConnection | prod-connection | Azure DevOps connection name to be used to deploy to Production. Is created in the Azure DevOps -> Project Settings |
+    | prodResourceGroupName | prod-rg | Resource Group in the Prod subscription to be used during deployment |
+    | prodSubscriptionId | 1234-abc | Azure subscription Id of the prod environment |
+    | prodSharedImageGalleryName | dsf_sig | Shared image gallery name in the prod environment |
+    | projectName | DSF | Used for Azure tagging |
+    | uipathDemoGitRepo | alpaka/uipath-dsf-ai-fabric-email-classification.git | List of comma separated git repositories containing demos |
+    | testAzureConnection | prod-connection | Azure DevOps connection name to be used to deploy to Test. It is created in the Azure DevOps -> Project Settings |
+    | testResourceGroupName | prod-rg | Resource Group in the Test subscription to be used during deployment |
+    | testSubscriptionId | 1234-abc | Azure subscription Id of the Test environment |
+    | testSharedImageGalleryName | dsf_sig | Shared image gallery name in the Test environment |
+    | replicationRegions |

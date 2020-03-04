@@ -82,13 +82,13 @@
         version: '11.0.10'
         ignore_checksums: yes # sha256:C438AC343381031CD47DD4ED966C8E86B2BCD5A1959F55C1C7D8C61920DD18BC
 
-    - name: Install JDK8
-      win_chocolatey:
-        name: jdk8
-
-    - name: Install JRE8
-      win_chocolatey:
-        name: jre8
+#    - name: Install JDK8
+#      win_chocolatey:
+#        name: jdk8
+#
+#    - name: Install JRE8
+#      win_chocolatey:
+#        name: jre8
 
     # Powershell modules installation
     - name: Ensure NuGET package provider
@@ -114,8 +114,14 @@
         state: present
         product_id: '{2F9DD2FF-128B-4957-9035-3DB2F80B5E51}'
     
-    - name: Autostart UiPath Robot immediately
-      win_shell: sc.exe config UiRobotSvc start=auto
+#    - name: Autostart UiPath Robot immediately
+#      win_shell: sc.exe config UiRobotSvc start=auto
+#
+    - name: Set service startup mode to auto and ensure it is started
+      win_service:
+        name: UiRobotSvc
+        start_mode: auto
+        state: started
 
     #Install SAP Components
     - name: Install SAP Components
@@ -148,4 +154,3 @@
       win_certificate_store:
         path: C:\Temp\configFiles\orchestratorCertificate.cer
         store_name: Root
-    
