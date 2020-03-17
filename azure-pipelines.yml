@@ -94,6 +94,7 @@ stages:
                   scriptType: bash
                   scriptLocation: inlineScript
                   inlineScript: |
-                    MANAGED_IMAGE="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
-                    az resource move --destination-group $(prodResourceGroupName) --destination-subscription-id $(prodSubscriptionId) --subscription $(testSubscriptionId) --ids $MANAGED_IMAGE
-                    az sig image-version create -g $(prodResourceGroupName) --gallery-name $(prodSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
+                    SOURCE_MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
+                    DEST_MANAGED_IMAGE="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
+                    az resource move --destination-group $(prodResourceGroupName) --destination-subscription-id $(prodSubscriptionId) --subscription $(testSubscriptionId) --ids $SOURCE_MANAGED_IMAGE
+                    az sig image-version create -g $(prodResourceGroupName) --gallery-name $(prodSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $DEST_MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
