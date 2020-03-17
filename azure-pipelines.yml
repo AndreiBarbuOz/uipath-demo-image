@@ -96,5 +96,9 @@ stages:
                   inlineScript: |
                     SOURCE_MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
                     DEST_MANAGED_IMAGE="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
+                    SIG_DEF="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/galleries/DSF_sig/images/$(managedImageName)"
+                    LOCATION=`az sig image-definition show --ids $SIG_DEF --query 'location' -o tsv`
+                    az resource delete --ids $DEST_MANAGED_IMAGE
+                    az resource wait --deleted --ids $DEST_MANAGED_IMAGE
                     az resource move --destination-group $(prodResourceGroupName) --destination-subscription-id $(prodSubscriptionId) --subscription $(testSubscriptionId) --ids $SOURCE_MANAGED_IMAGE
-                    az sig image-version create -g $(prodResourceGroupName) --gallery-name $(prodSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $DEST_MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
+                    az sig image-version create -g $(prodResourceGroupName) --gallery-name $(prodSharedImageGalleryName) --gallery-image-definition $(managedImageName) --location $LOCATION --gallery-image-version 0.0.$(Build.BuildId) --managed-image $DEST_MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
