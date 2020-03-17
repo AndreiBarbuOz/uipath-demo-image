@@ -87,7 +87,13 @@ stages:
           runOnce:
             deploy:
               steps:
-              - bash: echo "publishing to Prod"
-                displayName: 'Test echo'
-                failOnStderr: true
-      
+              - task: AzureCLI@2
+                displayName: publish image to SIG and replicate
+                inputs:
+                  azureSubscription: $(prodAzureConnection)
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  inlineScript: |
+                    MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
+                    az resource move --destination-group $(prodResourceGroupName) --destination-subscription-id $(prodSubscriptionId) --subscription $(testSubscriptionId) --ids $MANAGED_IMAGE
+                    az sig image-version create -g $(prodResourceGroupName) --gallery-name $(prodSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
