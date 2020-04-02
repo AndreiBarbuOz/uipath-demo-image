@@ -9,7 +9,7 @@
         config_folder: 'C:\UiPath\config\'
         git_repos: "{{ lookup('env','GIT_REPO_SOURCE').split(',') }}"
         git_token: "{{ lookup('env', 'GIT_TOKEN') }}"
-        mongoDBConnectionString: "{{ lookup('env', 'MONGO_DB_CONNECTION_STRING') }}"
+      no_log: True
 
     # Create required folders
     - name: Create demo folder
@@ -21,11 +21,6 @@
       win_file:
         path: "{{ config_folder }}"
         state: directory
-
-    - name: Create initial config
-      win_copy:
-        content: "{'mongoDBConnectionString': '{{ mongoDBConnectionString }}'}"
-        dest: "{{ config_folder }}dsf.json"
 
     - name: Copy PowerShell helper scripts to C:\Temp
       win_copy:

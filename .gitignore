@@ -6,3 +6,4 @@ packer/parameters_dev1.json
 packer/parameters_dev2.json
 ansible/id_rsa
 ansible/play.yml
+\.idea/*
