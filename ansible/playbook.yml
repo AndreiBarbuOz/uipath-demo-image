@@ -44,6 +44,7 @@
         git clone https://{{git_token}}@github.com/{{ item }}
       loop:
         "{{ git_repos }}"
+      no_log: True
 
     - name: Install Firefox, NP++, github-desktop
       win_chocolatey:
