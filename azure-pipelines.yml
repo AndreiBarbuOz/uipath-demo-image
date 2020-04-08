@@ -49,12 +49,13 @@ stages:
           inputs:
             pathToPublish: $(Build.ArtifactStagingDirectory)
             artifactName: manifest
-  - stage: DeployUAT
-    displayName: Publish image to SIG in UAT
+
+  - stage: DeployDevUat
+    displayName: Deploy dev branch to UAT
     dependsOn: Build
-    condition: succeeded()
+    condition: and( succeeded(), not( eq( variables['Build.Reason'], 'PullRequest')))
     jobs:
-      - deployment: deployUAT
+      - deployment: deployDevUat
         environment: uat
         pool:
           vmImage: 'ubuntu-16.04'
@@ -71,12 +72,37 @@ stages:
                   scriptLocation: inlineScript
                   inlineScript: |
                     MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
-                    az sig image-version create -g $(testResourceGroupName) --gallery-name $(testSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE --storage-account-type standard_zrs --target-regions $(targetRegions)
+                    az sig image-version create -g $(testResourceGroupName) --gallery-name $(testSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE --storage-account-type standard_zrs
+
+
+  - stage: DeployPrUat
+    displayName: Deploy pull request to UAT
+    dependsOn: Build
+    condition: and( succeeded(),eq( variables['system.pullRequest.targetBranch'], 'master'), eq( variables['Build.Reason'], 'PullRequest'))
+    jobs:
+      - deployment: deployPrUat
+        environment: uat
+        pool:
+          vmImage: 'ubuntu-16.04'
+        timeoutInMinutes: 360
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: AzureCLI@2
+                displayName: publish image to SIG and replicate
+                inputs:
+                  azureSubscription: $(testAzureConnection)
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  inlineScript: |
+                    MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
+                    az sig image-version create -g $(testResourceGroupName) --gallery-name $(testSharedImageGalleryName) --gallery-image-definition $(managedImageName) --gallery-image-version 0.0.$(Build.BuildId) --managed-image $MANAGED_IMAGE --storage-account-type standard_zrs
 
   - stage: DeployProd
-    displayName: Publish image to SIG in Prod
-    dependsOn: DeployUAT
-    condition: succeeded()
+    displayName: Deploy to Prod
+    dependsOn: DeployPrUat
+    condition: and( succeeded(),eq( variables['system.pullRequest.targetBranch'], 'master'), eq( variables['Build.Reason'], 'PullRequest'))
     jobs:
       - deployment: deployProd
         environment: prod
