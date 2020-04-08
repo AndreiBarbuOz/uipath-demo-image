@@ -122,7 +122,7 @@ stages:
                   inlineScript: |
                     SOURCE_MANAGED_IMAGE="/subscriptions/$(testSubscriptionId)/resourceGroups/$(testResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
                     DEST_MANAGED_IMAGE="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/images/$(managedImageName)"
-                    SIG_DEF="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/galleries/DSF_sig/images/$(managedImageName)"
+                    SIG_DEF="/subscriptions/$(prodSubscriptionId)/resourceGroups/$(prodResourceGroupName)/providers/Microsoft.Compute/galleries/$(prodSharedImageGalleryName)/images/$(managedImageName)"
                     LOCATION=`az sig image-definition show --ids $SIG_DEF --query 'location' -o tsv`
                     az resource delete --ids $DEST_MANAGED_IMAGE
                     az resource wait --deleted --ids $DEST_MANAGED_IMAGE
