@@ -67,6 +67,11 @@
         version: 3.6.8
         state: present
 
+    - name: Add Azure Storage PowerShell module
+      win_psmodule:
+        name: Azure.Storage
+        state: present
+
     - name: Install ChromeDriver
       win_chocolatey:
         name: chromedriver
