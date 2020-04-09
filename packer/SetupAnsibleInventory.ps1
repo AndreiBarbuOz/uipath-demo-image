@@ -16,7 +16,7 @@ $IPAddress = (get-WmiObject Win32_NetworkAdapterConfiguration|Where-Object {$_.I
 $PublicIPAddress = (Invoke-WebRequest -uri "https://api.ipify.org/" -UseBasicParsing).Content
 
 #build a template
-$content = "[default]`n[[IPADDRESS]]`n`n[default:vars]`nansible_connection=winrm`nansible_port=[[PORT]]`nansible_winrm_transport=basic`nansible_user=[[USER]]`nansible_password=[[PASS]]`nansible_winrm_message_encryption=auto`nansible_winrm_server_cert_validation=[[INSEC]]`nartifact_server=[[ARTSERVER]]`nansible_winrm_read_timeout_sec=600`n"
+$content = "[default]`n[[IPADDRESS]]`n`n[default:vars]`nansible_connection=winrm`nansible_port=[[PORT]]`nansible_winrm_transport=basic`nansible_user=[[USER]]`nansible_password=[[PASS]]`nansible_winrm_message_encryption=auto`nansible_winrm_server_cert_validation=[[INSEC]]`nartifact_server=[[ARTSERVER]]`nansible_winrm_read_timeout_sec=1200`n"
 
 #Update content with connectionstrings
 $content = $content.replace('[[IPADDRESS]]',$PublicIPAddress)
