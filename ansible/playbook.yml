@@ -115,9 +115,6 @@
         state: present
         product_id: '{2F9DD2FF-128B-4957-9035-3DB2F80B5E51}'
     
-#    - name: Autostart UiPath Robot immediately
-#      win_shell: sc.exe config UiRobotSvc start=auto
-#
     - name: Set service startup mode to auto and ensure it is started
       win_service:
         name: UiRobotSvc
@@ -140,6 +137,8 @@
         pip install pymongo
         pip install azure
         pip install requests
+        pip install azure-mgmt-resource
+        pip install msrestazure
 
     - name: Download nuget pkg
       win_get_url:
