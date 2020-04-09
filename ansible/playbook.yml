@@ -139,6 +139,10 @@
         pip install requests
         pip install azure-mgmt-resource
         pip install msrestazure
+        pip install azure-keyvault-secrets 
+        pip install azure-keyvault-keys
+        pip install azure-keyvault-certificates
+        pip install azure-identity
 
     - name: Download nuget pkg
       win_get_url:
