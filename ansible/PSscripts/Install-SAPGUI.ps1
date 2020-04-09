@@ -1,11 +1,15 @@
+#Require -Modules Azure.Storage
+
 param(
     [string] $DownloadDirectory = "C:\Temp\SAPWorkdir",
 
     [string] $UserConfigDirectory = "C:\Temp\configFiles",
 
-    [string] $DownloadURL = "https://presalesdemobuild.blob.core.windows.net/binaries/SAPGUI_Installer.zip", #"https://presalesceinternalautoma.blob.core.windows.net/binaries/SAPGUI_Installer.zip"
+    [string] $Package = "SAPGUI_Installer.zip",
 
-    [string] $ProductsToInstall = "SAPGUI+NWBC65"
+    [string] $ProductsToInstall = "SAPGUI+NWBC65",
+
+    [string] $ConnectionString    
 )
 
 $MainZip = "SAPGUI_Installer.zip"
@@ -20,8 +24,8 @@ if (!(Test-Path $DownloadDirectory)) {
 }
 
 #Download binaries and the template for user configuration
-$webClinet = New-Object System.Net.WebClient
-$webClinet.DownloadFile($DownloadURL, $(Join-Path $DownloadDirectory $MainZip));
+$context = New-AzureStorageContext  -ConnectionString $ConnectionString
+Get-AzureStorageBlobContent -Context $context -Container "binaries" -Blob $Package -Destination $(Join-Path $DownloadDirectory $MainZip) -Force
 
 #Extract zipped files
 Add-Type -AssemblyName System.IO.Compression.FileSystem
