@@ -9,6 +9,7 @@
         config_folder: 'C:\UiPath\config\'
         git_repos: "{{ lookup('env','GIT_REPO_SOURCE').split(',') }}"
         git_token: "{{ lookup('env', 'GIT_TOKEN') }}"
+        blob_conn_string: "{{ lookup('env', 'BLOB_CONN_STRING') }}"
       no_log: True
 
     # Create required folders
