@@ -123,7 +123,10 @@
 
     #Install SAP Components
     - name: Install SAP Components
-      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1
+      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1 -ConnectionString "{{ blob_conn_string }}"
+      args:
+        creates: "C:\\Program Files (x86)\\SAP"
+      no_log: True
 
     - name: Install Access Database Engine 2010
       win_chocolatey:
