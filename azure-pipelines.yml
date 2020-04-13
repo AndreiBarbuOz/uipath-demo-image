@@ -41,6 +41,7 @@ stages:
             PACKER_BASE_IMAGE: '$(packerBaseImage)'
             PACKER_BASE_SKU: '$(packerBaseSKU)'
             PACKER_USERNAME: '$(packerUsername)'
+            BLOB_CONN_STRING: '$(blobConnectionString)'
         - task: CopyFiles@2
           inputs:
             targetFolder: $(Build.ArtifactStagingDirectory)
