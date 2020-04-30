@@ -9,6 +9,7 @@
         config_folder: 'C:\UiPath\config\'
         git_repos: "{{ lookup('env','GIT_REPO_SOURCE').split(',') }}"
         git_token: "{{ lookup('env', 'GIT_TOKEN') }}"
+        blob_conn_string: "{{ lookup('env', 'BLOB_CONN_STRING') }}"
       no_log: True
 
     # Create required folders
@@ -123,7 +124,10 @@
 
     #Install SAP Components
     - name: Install SAP Components
-      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1
+      win_shell: C:\Temp\PSscripts\Install-SAPGUI.ps1 -ConnectionString "{{ blob_conn_string }}"
+      args:
+        creates: "C:\\Program Files (x86)\\SAP"
+      no_log: True
 
     - name: Install Access Database Engine 2010
       win_chocolatey:
