@@ -34,7 +34,8 @@
       "managed_image_storage_account_type": "Premium_LRS",
       "azure_tags": {
         "Owner": "{{user `owner_email`}}",
-        "Project": "{{user `project_name`}}"
+        "Project": "{{user `project_name`}}",
+        "AlwaysPoweredOn": "true"
       },
       "vm_size": "{{user `vm_size`}}"
     }
