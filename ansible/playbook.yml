@@ -146,11 +146,6 @@
         pip install azure-keyvault-keys
         pip install azure-keyvault-certificates
         pip install azure-identity
-
-    - name: Download nuget pkg
-      win_get_url:
-        url: https://presalesdemobuild.blob.core.windows.net/binaries/uipath.machinelearningextractor.1.0.0-beta.540392.nupkg
-        dest: C:\Program Files (x86)\UiPath\Studio\Packages\uipath.machinelearningextractor.1.0.0-beta.540392.nupkg
     
     - name: Import Insights Orchestrator certificate 1/2
       win_certificate_store:
