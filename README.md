@@ -1,5 +1,7 @@
 # UiPath demo image
 
+![Hits](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fgithub.com%2FAndreiBarbuOz%2Fuipath-demo-image)
+
 [![Build Status](https://dev.azure.com/andreibarbu0946/DSF/_apis/build/status/AndreiBarbuOz.uipath-demo-image?branchName=master)](https://dev.azure.com/andreibarbu0946/DSF/_build/latest?definitionId=5&branchName=master)
 
 ## Purpose

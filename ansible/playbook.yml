@@ -139,7 +139,6 @@
     - name: install pip modules
       win_shell: |
         pip install pymongo
-        pip install azure
         pip install requests
         pip install azure-mgmt-resource
         pip install msrestazure
