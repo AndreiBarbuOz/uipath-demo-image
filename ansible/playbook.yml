@@ -65,7 +65,6 @@
     - name: Install python
       win_chocolatey:
         name: python3
-        version: 3.6.8
         state: present
 
     - name: Add Azure Storage PowerShell module
@@ -78,10 +77,10 @@
         name: chromedriver
         state: present
 
-    - name: Install Adobe Reader v11.0.10
+    - name: Install Adobe Reader 
       win_chocolatey:
         name: adobereader
-        version: '11.0.10'
+        version: '2020.009.20067'
         ignore_checksums: yes # sha256:C438AC343381031CD47DD4ED966C8E86B2BCD5A1959F55C1C7D8C61920DD18BC
 
 #    - name: Install JDK8
@@ -100,21 +99,21 @@
     # https://support.google.com/chrome/thread/9069715?hl=en
     - name: Install UiPath Studio
       win_package:
-        path: https://download.uipath.com/versions/19.10.4/UiPathStudio.msi
+        path: https://download.uipath.com/versions/20.4.1/UiPathStudio.msi
         arguments:
         - /quiet
-        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,UseAgentDesktop,StartupLauncher,RegisterService,JavaBridge,ChromeExtension
+        - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,StartupLauncher,RegisterService,JavaBridge,ChromeExtension
         state: present
-        product_id: '{84EFE417-2716-4CF3-B5B1-A907FB6498AE}'
+        product_id: '{3067A978-2709-4976-8F50-6CD65A1DC380}'
 
     - name: Install UiPath Remote Runtime
       win_package:
-        path: https://download.uipath.com/versions/19.10.4/UiPathRemoteRuntime.msi
+        path: https://download.uipath.com/versions/20.4.1/UiPathRemoteRuntime.msi
         arguments:
           - /quiet
           - ADDLOCAL=RemoteRuntime,RemoteRuntimeTask
         state: present
-        product_id: '{2F9DD2FF-128B-4957-9035-3DB2F80B5E51}'
+        product_id: '{299DBA4A-AB63-42EE-AF8C-EF020D2EB900}'
     
     - name: Set service startup mode to auto and ensure it is started
       win_service:
@@ -139,7 +138,7 @@
     - name: install pip modules
       win_shell: |
         pip install pymongo
-        pip install azure
+        pip install azure-core
         pip install requests
         pip install azure-mgmt-resource
         pip install msrestazure
@@ -147,11 +146,6 @@
         pip install azure-keyvault-keys
         pip install azure-keyvault-certificates
         pip install azure-identity
-
-    - name: Download nuget pkg
-      win_get_url:
-        url: https://presalesdemobuild.blob.core.windows.net/binaries/uipath.machinelearningextractor.1.0.0-beta.540392.nupkg
-        dest: C:\Program Files (x86)\UiPath\Studio\Packages\uipath.machinelearningextractor.1.0.0-beta.540392.nupkg
     
     - name: Import Insights Orchestrator certificate 1/2
       win_certificate_store:
