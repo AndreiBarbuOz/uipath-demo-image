@@ -99,7 +99,7 @@
     # https://support.google.com/chrome/thread/9069715?hl=en
     - name: Install UiPath Studio
       win_package:
-        path: https://download.uipath.com/versions/20.4.1/UiPathStudio.msi
+        path: https://download.uipath.com/versions/20.4.3/UiPathStudio.msi
         arguments:
         - /quiet
         - ADDLOCAL=DesktopFeature,Robot,Packages,Studio,StartupLauncher,RegisterService,JavaBridge,ChromeExtension
@@ -108,7 +108,7 @@
 
     - name: Install UiPath Remote Runtime
       win_package:
-        path: https://download.uipath.com/versions/20.4.1/UiPathRemoteRuntime.msi
+        path: https://download.uipath.com/versions/20.4.2/UiPathRemoteRuntime.msi
         arguments:
           - /quiet
           - ADDLOCAL=RemoteRuntime,RemoteRuntimeTask
