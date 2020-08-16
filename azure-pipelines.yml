@@ -15,7 +15,7 @@ stages:
           vmImage: 'ubuntu-18.04'
         container:
           image: $(containerRegistry).azurecr.io/$(dockerBuildRepositoryName):latest
-          endpoint: dsfvmcontainer
+          endpoint: dsfAcrConnection
         timeoutInMinutes: 360
         steps:
         - bash: 'sudo chown -R "$(whoami):" .'
