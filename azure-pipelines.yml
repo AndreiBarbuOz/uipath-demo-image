@@ -12,10 +12,10 @@ stages:
     jobs:
       - job: demo_image_build
         pool:
-          vmImage: 'ubuntu-16.04'
+          vmImage: 'ubuntu-18.04'
         container:
           image: $(containerRegistry).azurecr.io/$(dockerBuildRepositoryName):latest
-          endpoint: demovmcontainer
+          endpoint: dsfAcrConnection
         timeoutInMinutes: 360
         steps:
         - bash: 'sudo chown -R "$(whoami):" .'
